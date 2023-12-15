@@ -1,43 +1,30 @@
 import React from "react";
-import type { todoListType } from "../types/todoListType";
 import * as S from "./Contentbox.style";
-interface Workingprops {
-  todoList: todoListType[];
-  setIsDone: React.Dispatch<React.SetStateAction<boolean>>;
-  setTodoList: React.Dispatch<React.SetStateAction<todoListType[]>>;
-}
+import { useDispatch, useSelector } from "react-redux";
+import { switchTodo } from "../redux/modules/TodolistSlice";
+import { removeTodo } from "../redux/modules/TodolistSlice";
 
-const Working: React.FC<Workingprops> = ({
-  todoList,
-  setIsDone,
-  setTodoList,
-}) => {
+const Working = () => {
+  const dispatch = useDispatch();
+  const todos = useSelector(
+    (state: { TodolistSlice: { todos: todoListType[] } }) =>
+      state.TodolistSlice.todos
+  );
   const handleDoneClick = (id: number) => {
-    console.log("아이디", id);
-    const updateTodoList = todoList.map((list) => {
-      if (list.id === id) {
-        return {
-          ...list,
-          isDone: true,
-        };
-      }
-      return list;
-    });
-    setTodoList(updateTodoList);
+    dispatch(switchTodo(id));
   };
 
   const handleDeleteClick = (id: number) => {
     const deleteConfirm = window.confirm("정말 삭제하시겠습니까?");
     if (deleteConfirm) {
-      let deleteList = todoList.filter((list) => list.id !== id);
-      setTodoList(deleteList);
+      dispatch(removeTodo(id));
     }
   };
 
   return (
     <S.CONTENT_BOX>
       <h2>오늘의 할일 🔥</h2>
-      {todoList.map((list) => {
+      {todos.map((list) => {
         if (!list.isDone) {
           return (
             <S.CONTENT key={list.id}>

@@ -1,4 +1,4 @@
-export type todoListType = {
+declare type todoListType = {
   id: number;
   title: string;
   content: string;

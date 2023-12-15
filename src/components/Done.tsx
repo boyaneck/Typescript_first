@@ -1,36 +1,31 @@
 import React from "react";
-import type { todoListType } from "../types/todoListType";
 import * as S from "./Contentbox.style";
-interface DoneProps {
-  todoList: todoListType[];
-  setTodoList: React.Dispatch<React.SetStateAction<todoListType[]>>;
-}
+import { useDispatch, useSelector } from "react-redux";
+import { switchTodo } from "../redux/modules/TodolistSlice";
+import { removeTodo } from "../redux/modules/TodolistSlice";
 
-const Done: React.FC<DoneProps> = ({ todoList, setTodoList }) => {
+const Done = () => {
+  const dispatch = useDispatch();
+  const todos = useSelector(
+    (state: { TodolistSlice: { todos: todoListType[] } }) =>
+      state.TodolistSlice.todos
+  );
+  console.log("todos", todos);
+
   const handleCancelDoneClick = (id: number) => {
-    const cancelList = todoList.map((list) => {
-      if (list.id === id) {
-        return {
-          ...list,
-          isDone: false,
-        };
-      }
-      return list;
-    });
-    setTodoList(cancelList);
+    dispatch(switchTodo(id));
   };
   const handleDeleteClick = (id: number) => {
     const deleteConfirm = window.confirm("정말 삭제하시겠습니까?");
     if (deleteConfirm) {
-      let deleteList = todoList.filter((list) => list.id !== id);
-      setTodoList(deleteList);
+      dispatch(removeTodo(id));
     }
   };
   return (
     <S.CONTENT_BOX>
       <h2>할일 완료 👏</h2>
 
-      {todoList.map((list) => {
+      {todos.map((list) => {
         if (list.isDone) {
           return (
             <S.CONTENT key={list.id}>

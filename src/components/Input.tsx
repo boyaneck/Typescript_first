@@ -1,34 +1,31 @@
 import React, { SetStateAction } from "react";
-import { todoListType } from "../types/todoListType";
 import * as S from "./Contentbox.style";
-interface InputProps {
-  title: string;
-  setTitle: React.Dispatch<SetStateAction<string>>;
-  content: string;
-  setContent: React.Dispatch<SetStateAction<string>>;
-  setTodoList: React.Dispatch<SetStateAction<todoListType[]>>;
-  todoList: todoListType[];
-}
-const Input: React.FC<InputProps> = ({
-  title,
-  setTitle,
-  content,
-  setContent,
-  setTodoList,
-  todoList,
-}) => {
+import { useDispatch } from "react-redux";
+import { addTodo } from "../redux/modules/TodolistSlice";
+import { useState } from "react";
+import { useSelector } from "react-redux";
+
+const Input = () => {
+  const [content, setContent] = useState<string>(""); //초기값이 ''으로 undefined 을 방지
+  const [title, setTitle] = useState<string>("");
+  const [isDone, setIsDone] = useState<boolean>(false);
+  const dispatch = useDispatch();
+  const todos = useSelector(
+    (state: { TodolistSlice: { todos: todoListType[] } }) =>
+      state.TodolistSlice.todos
+  );
   const handleTodoListAddClick = () => {
     if (!title || !content) {
       return alert("제목과 내용을 모두 기입해주세요!");
     }
     const newTodoList = {
-      id: todoList.length,
+      id: todos.length,
       title,
       content,
       isDone: false,
     };
 
-    setTodoList([...todoList, newTodoList]);
+    dispatch(addTodo(newTodoList));
     setTitle("");
     setContent("");
   };
