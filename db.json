@@ -1,22 +1,3 @@
 {
-  "todos": [
-    {
-      "id": "b71H57YgNZ9dKkBvKR_Mu",
-      "title": "ㅋㅋ",
-      "content": "ㄷㄷㄷ",
-      "isDone": false
-    },
-    {
-      "id": "hMzm02p"
-    },
-    {
-      "id": "u7P4fbGqcTEjOaljT16d_",
-      "title": "ㅋ",
-      "content": "ㄴ",
-      "isDone": false
-    },
-    {
-      "id": "0P7fGX5"
-    }
-  ]
+  "todos": []
 }
