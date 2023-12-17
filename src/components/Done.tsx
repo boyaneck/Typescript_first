@@ -1,8 +1,9 @@
-import React from "react";
+import React, { useEffect, useInsertionEffect } from "react";
 import * as S from "./Contentbox.style";
 import { useDispatch, useSelector } from "react-redux";
 import { switchTodo } from "../redux/modules/TodolistSlice";
 import { removeTodo } from "../redux/modules/TodolistSlice";
+import axios from "axios";
 
 const Done = () => {
   const dispatch = useDispatch();
@@ -10,7 +11,6 @@ const Done = () => {
     (state: { TodolistSlice: { todos: todoListType[] } }) =>
       state.TodolistSlice.todos
   );
-  console.log("todos", todos);
 
   const handleCancelDoneClick = (id: number) => {
     dispatch(switchTodo(id));
@@ -21,6 +21,7 @@ const Done = () => {
       dispatch(removeTodo(id));
     }
   };
+
   return (
     <S.CONTENT_BOX>
       <h2>할일 완료 👏</h2>

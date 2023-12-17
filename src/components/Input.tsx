@@ -4,7 +4,6 @@ import { useDispatch } from "react-redux";
 import { addTodo } from "../redux/modules/TodolistSlice";
 import { useState } from "react";
 import { useSelector } from "react-redux";
-
 const Input = () => {
   const [content, setContent] = useState<string>(""); //초기값이 ''으로 undefined 을 방지
   const [title, setTitle] = useState<string>("");
