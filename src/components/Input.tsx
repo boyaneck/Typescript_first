@@ -1,14 +1,19 @@
 import React, { useState } from "react";
 import * as S from "./Contentbox.style";
 import { nanoid } from "@reduxjs/toolkit";
-import { useDispatch } from "react-redux";
-import { addTodo } from "../redux/modules/TodolistSlice";
-import axios from "axios";
+import { addTodos } from "../api/todos";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
 
 const Input = () => {
+  const queryClient = useQueryClient();
+  const mutation = useMutation({
+    mutationFn: addTodos,
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["todos"] });
+    },
+  });
   const [content, setContent] = useState<string>("");
   const [title, setTitle] = useState<string>("");
-  const dispatch = useDispatch();
 
   const handleTodoListAddClick = async () => {
     if (!title || !content) {
@@ -22,18 +27,9 @@ const Input = () => {
       isDone: false,
     };
 
-    try {
-      const response = await axios.post(
-        `${process.env.REACT_APP_BASE_URL}/todos`,
-        newTodoList
-      );
-
-      dispatch(addTodo(response.data)); // 새로운 todo를 상태에 추가
-      setTitle("");
-      setContent("");
-    } catch (error) {
-      console.log("값 받아오기 error", error);
-    }
+    mutation.mutate(addTodos(newTodoList));
+    setTitle("");
+    setContent("");
   };
 
   const handleOnChange = (event: React.ChangeEvent<HTMLInputElement>) => {
