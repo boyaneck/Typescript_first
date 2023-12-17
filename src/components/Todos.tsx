@@ -1,8 +1,4 @@
-import React, { useEffect } from "react";
-import { useDispatch, useSelector } from "react-redux";
-import { removeTodo, switchTodo } from "../redux/modules/TodolistSlice";
 import * as S from "./Contentbox.style";
-import { setTodos } from "../redux/modules/TodolistSlice";
 import axios from "axios";
 import { getTodos, removeTodos, switchTodos } from "../api/todos";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
@@ -18,6 +14,7 @@ const Todos = () => {
       queryClient.invalidateQueries({ queryKey: ["todos"] });
     },
   });
+
   const switchMutation = useMutation({
     mutationFn: switchTodos,
     onSuccess: () => {
@@ -26,16 +23,16 @@ const Todos = () => {
   });
 
   const handleSwitchClick = async (id: number) => {
-    switchMutation.mutate(switchTodos(id));
+    let find = data?.find((list: todoListType) => list.id === id);
+    removeMutation.mutate(
+      switchTodos({ ...find, isDone: !find?.isDone } as todoListType)
+    );
   };
 
   const handleDeleteClick = async (id: number) => {
     const deleteConfirm = window.confirm("정말 삭제하시겠습니까?");
     if (deleteConfirm) {
-      try {
-        // await axios.delete(`${process.env.REACT_APP_BASE_URL}/todos/${id}`);
-        removeMutation.mutate(removeTodos(id));
-      } catch (error) {}
+      removeMutation.mutate(removeTodos(id));
     }
   };
   if (isError) <div>서버와의 통신에서 오류가 발생했습니다.</div>;

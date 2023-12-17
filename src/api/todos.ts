@@ -13,7 +13,10 @@ const addTodos = async (newTodo: any) => {
 const removeTodos = async (id: any) => {
   await axios.delete(`${process.env.REACT_APP_BASE_URL}/todos/${id}`);
 };
-const switchTodos = async (id: any) => {
-  await axios.patch(`${process.env.REACT_APP_BASE_URL}/todos/${id}}`);
+const switchTodos = async (editedTodo: todoListType) => {
+  await axios.patch(
+    `${process.env.REACT_APP_BASE_URL}/todos/${editedTodo.id}`,
+    editedTodo
+  );
 };
 export { getTodos, addTodos, removeTodos, switchTodos };
